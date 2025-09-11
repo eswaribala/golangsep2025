@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -22,6 +23,11 @@ func main() {
 		EngineNo:           "EN123456789",
 		Color:              "Red",
 	}
+
+	//marshalling the struct to json
+	jsonString, _ := json.Marshal(vehicle)
+	fmt.Printf("JSON String: %s\n", string(jsonString))
+
 	//assigning to interface
 	vehicleRepo = vehicle
 	result, _ := vehicleRepo.Save()
@@ -54,4 +60,22 @@ func main() {
 	status, _ := vehicleRepo.Delete(vehicle.RegistrationNo)
 	fmt.Println("Deleted:", status)
 
+	//unmarshalling json to struct
+	jsonLocation := `{"door_no":"123","street_name":"MainSt","city":"Metropolis"}`
+	location, err := ConvertJsonToModel(jsonLocation)
+	if err != nil {
+		println(err.Error())
+	}
+	for key, value := range utility.StructToMapLocation(location) {
+		fmt.Printf("%s : %v\n", key, value)
+	}
+}
+
+func ConvertJsonToModel(jsonString string) (*models.Location, error) {
+	var location models.Location
+	err := json.Unmarshal([]byte(jsonString), &location)
+	if err != nil {
+		return nil, err
+	}
+	return &location, nil
 }
