@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"os"
 	"time"
 
 	"github.com/eswaribala/claimapp/interfaces"
@@ -69,6 +71,10 @@ func main() {
 	for key, value := range utility.StructToMapLocation(location) {
 		fmt.Printf("%s : %v\n", key, value)
 	}
+
+	//unmarshal json file to slice of maps
+	UnmarshalJsonFile()
+
 }
 
 func ConvertJsonToModel(jsonString string) (*models.Location, error) {
@@ -78,4 +84,26 @@ func ConvertJsonToModel(jsonString string) (*models.Location, error) {
 		return nil, err
 	}
 	return &location, nil
+}
+
+func UnmarshalJsonFile() {
+	//read json file
+	file, err := os.Open("users.json")
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+	defer file.Close()
+
+	byteValue, _ := io.ReadAll(file)
+	//when the json is an array of objects and we want to unmarshal it into a slice of maps
+	var result []map[string]interface{}
+	json.Unmarshal(byteValue, &result)
+
+	for i, obj := range result {
+		fmt.Printf("Object %d:\n", i+1)
+		for key, value := range obj {
+			fmt.Printf("%s : %v\n", key, value)
+		}
+	}
 }
