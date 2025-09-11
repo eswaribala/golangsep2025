@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -106,4 +107,29 @@ func UnmarshalJsonFile() {
 			fmt.Printf("%s : %v\n", key, value)
 		}
 	}
+
+	ReadAirlinesFromCSVFile()
+}
+
+func ReadAirlinesFromCSVFile() {
+	//read csv file
+	file, err := os.Open("tmax.csv")
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+	defer file.Close()
+	reader := csv.NewReader(file)
+	records, err := reader.ReadAll()
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		return
+	}
+	for i, record := range records {
+		fmt.Printf("Record %d:\n", i+1)
+		for j, field := range record {
+			fmt.Printf("Field %d: %s\n", j+1, field)
+		}
+	}
+
 }
