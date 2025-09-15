@@ -18,7 +18,7 @@ func main() {
 	//create 10 vehicle instances and save them to csv file
 	for i := 1; i <= 10; i++ {
 		vehicle := &models.Vehicle{
-			RegistrationNo:     "KA-01-1234",
+			RegistrationNo:     "KA-01-123" + fmt.Sprintf("%02d", i),
 			Maker:              "Toyota",
 			DateOfRegistration: time.Now(),
 			ChassisNo:          "CH123456789",
@@ -39,6 +39,7 @@ func main() {
 	vehicles, _ := vehicleRepo.GetAll()
 	fmt.Println("All vehicles:")
 	for _, v := range vehicles {
+		fmt.Println("Vehicle:", v)
 		for key, value := range utility.StructToMapVehicle(v) {
 
 			fmt.Printf("%s : %v\n", key, value)
