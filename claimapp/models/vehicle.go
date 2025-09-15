@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"os"
 	"time"
 )
 
@@ -57,4 +58,30 @@ func (v *Vehicle) Delete(id string) (bool, error) {
 		return true, nil
 	}
 	return false, fmt.Errorf("vehicle not found")
+}
+
+func (v *Vehicle) SaveToFile(fileName string, vehicles, headers []string, vehicleModels []*Vehicle) (bool, error) {
+	// Create or open the file
+	file, err := os.Create(fileName)
+	if err != nil {
+		return false, err
+	}
+	defer file.Close()
+	// Write headers
+
+	_, err = file.WriteString(fmt.Sprintf("%s\n", headers))
+	if err != nil {
+		return false, err
+	}
+	// Write vehicle data
+	for _, vehicle := range vehicleModels {
+		_, err = file.WriteString(fmt.Sprintf("%s\n", vehicle))
+
+		if err != nil {
+			return false, err
+		}
+
+	}
+	return true, nil
+
 }

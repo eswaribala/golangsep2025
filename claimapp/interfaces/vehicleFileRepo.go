@@ -1,9 +1,7 @@
 package interfaces
 
-import (
-	"github.com/eswaribala/claimapp/models"
-)
+import "github.com/eswaribala/claimapp/models"
 
 type IVehicleFileRepo interface {
-	SaveToFile(vehicles []*models.Vehicle) (bool, error)
+	SaveToFile(fileName string, vehicles, headers []string, vehicleModels []*models.Vehicle) (bool, error)
 }
