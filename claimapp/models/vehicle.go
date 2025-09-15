@@ -60,7 +60,7 @@ func (v *Vehicle) Delete(id string) (bool, error) {
 	return false, fmt.Errorf("vehicle not found")
 }
 
-func (v *Vehicle) SaveToFile(fileName string, vehicles, headers []string, vehicleModels []*Vehicle) (bool, error) {
+func (v *Vehicle) SaveToFile(fileName string, headers []string, vehicleModels []*Vehicle) (bool, error) {
 	// Create or open the file
 	file, err := os.Create(fileName)
 	if err != nil {

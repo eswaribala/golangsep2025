@@ -38,12 +38,22 @@ func main() {
 	log.Println("10 vehicles saved successfully.")
 	vehicles, _ := vehicleRepo.GetAll()
 	fmt.Println("All vehicles:")
+	headers := []string{"RegistrationNo", "Maker", "DateOfRegistration", "ChassisNo", "FuelType", "EngineNo", "Color"}
+	fileName := "vehicles.csv"
 	for _, v := range vehicles {
 		fmt.Println("Vehicle:", v)
 		for key, value := range utility.StructToMapVehicle(v) {
 
 			fmt.Printf("%s : %v\n", key, value)
 		}
+	}
+
+	success, err := vehicles[0].SaveToFile(fileName, headers, vehicles)
+	if err != nil {
+		log.Fatalf("Error saving vehicles to file: %v", err)
+	}
+	if success {
+		log.Println("Vehicles saved to file successfully.")
 	}
 
 }
