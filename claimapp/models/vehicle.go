@@ -69,13 +69,18 @@ func (v *Vehicle) SaveToFile(fileName string, headers []string, vehicleModels []
 	defer file.Close()
 	// Write headers
 
-	_, err = file.WriteString(fmt.Sprintf("%s\n", headers))
-	if err != nil {
-		return false, err
+	for _, header := range headers {
+
+		_, err = file.WriteString(fmt.Sprintf("%s\t", header))
+
+		if err != nil {
+			return false, err
+		}
 	}
+	file.WriteString(fmt.Sprintf("%s\n", "\n"))
 	// Write vehicle data
 	for _, vehicle := range vehicleModels {
-		_, err = file.WriteString(fmt.Sprintf("%s\n", vehicle))
+		_, err = file.WriteString(fmt.Sprintf("%s\n", vehicle.RegistrationNo+","+vehicle.Maker+","+vehicle.DateOfRegistration.Format("2006-01-02")+","+vehicle.ChassisNo+","+string(vehicle.FuelType)+","+vehicle.EngineNo+","+vehicle.Color))
 
 		if err != nil {
 			return false, err
