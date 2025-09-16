@@ -1,9 +1,13 @@
 package models
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"time"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // custom type
@@ -89,4 +93,31 @@ func (v *Vehicle) SaveToFile(fileName string, headers []string, vehicleModels []
 	}
 	return true, nil
 
+}
+
+// mongo db save function
+func (v *Vehicle) SaveToMongoDB(vehicleModels []*Vehicle) (bool, error) {
+	// Placeholder for MongoDB connection and insertion logic
+	//timeout context
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// MongoDB connection URI
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	client, err := mongo.Connect(ctx, clientOptions)
+	if err != nil {
+		return false, err
+	}
+	defer client.Disconnect(ctx)
+	collection := client.Database("VehicleDB").Collection("vehicles")
+	// Insert multiple vehicle documents
+	var docs []interface{}
+	for _, vehicle := range vehicleModels {
+		docs = append(docs, vehicle)
+	}
+	_, err = collection.InsertMany(ctx, docs)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }

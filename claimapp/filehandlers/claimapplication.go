@@ -56,4 +56,13 @@ func main() {
 		log.Println("Vehicles saved to file successfully.")
 	}
 
+	//save to mongodb
+	success, err = vehicles[0].SaveToMongoDB(vehicles)
+	if err != nil {
+		log.Fatalf("Error saving vehicles to MongoDB: %v", err)
+	}
+	if success {
+		log.Println("Vehicles saved to MongoDB successfully.")
+	}
+
 }
