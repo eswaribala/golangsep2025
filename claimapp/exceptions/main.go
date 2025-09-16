@@ -7,7 +7,8 @@ import (
 )
 
 func claimClosure() func() (int, error) {
-	basicClaimAmount := gofakeit.IntRange(0, 10000)
+	//basicClaimAmount := gofakeit.IntRange(0, 0)
+	basicClaimAmount := 0
 	return func() (int, error) {
 		basicClaimAmount += int(gofakeit.Float32Range(0.10, 0.50) * float32(basicClaimAmount))
 		if basicClaimAmount == 0 {
@@ -26,4 +27,5 @@ func main() {
 	} else {
 		println("Claim Amount:", amount)
 	}
+	println("Program continues...")
 }
