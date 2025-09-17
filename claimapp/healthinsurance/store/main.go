@@ -26,8 +26,9 @@ func ConnectionHelper() *gorm.DB {
 		log.Fatal("failed to connect database: ", err)
 	}
 	log.Println("Database connected successfully")
+	//auto migrate the schema
+	db.AutoMigrate(&Member{})
+	log.Println("Database migrated successfully")
 	return db
 
 }
-
-
