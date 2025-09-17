@@ -32,3 +32,6 @@ func ConnectionHelper() *gorm.DB {
 	return db
 
 }
+
+
+//save member data
