@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -120,4 +121,35 @@ func (v *Vehicle) SaveToMongoDB(vehicleModels []*Vehicle) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+func FetchVehiclesFromMongoDB() ([]*Vehicle, error) {
+	// Placeholder for MongoDB connection and fetching logic
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	client, err := mongo.Connect(ctx, clientOptions)
+	if err != nil {
+		return nil, err
+	}
+	defer client.Disconnect(ctx)
+	collection := client.Database("VehicleDB").Collection("vehicles")
+	cursor, err := collection.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var vehicles []*Vehicle
+	for cursor.Next(ctx) {
+		var vehicle Vehicle
+		if err := cursor.Decode(&vehicle); err != nil {
+			return nil, err
+		}
+		vehicles = append(vehicles, &vehicle)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+	return vehicles, nil
 }

@@ -64,5 +64,6 @@ func main() {
 	if success {
 		log.Println("Vehicles saved to MongoDB successfully.")
 	}
+	
 
 }
