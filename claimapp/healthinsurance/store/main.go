@@ -1,4 +1,4 @@
-package main
+package store
 
 import (
 	"log"
@@ -19,12 +19,13 @@ func ConnectionHelper() *gorm.DB {
 	host := os.Getenv("host")
 	port := os.Getenv("port")
 	dbName := os.Getenv("dbname")
+
 	dsn := userName + ":" + password + "@tcp(" + host + ":" + port + ")/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("failed to connect database: ", err)
 	}
-
+	log.Println("Database connected successfully")
 	return db
 
 }
