@@ -28,3 +28,54 @@ func (m *Member) SaveMember() (bool, error) {
 	}
 	return true, nil
 }
+
+func (m *Member) GetAllMembers() ([]*Member, error) {
+	db := ConnectionHelper()
+	var members []*Member
+	if err := db.Find(&members).Error; err != nil {
+		return nil, err
+	}
+	return members, nil
+}
+
+func (m *Member) GetMemberByID(id uint) (*Member, error) {
+	db := ConnectionHelper()
+	var member Member
+	if err := db.First(&member, id).Error; err != nil {
+		return nil, err
+	}
+	return &member, nil
+}
+
+func (m *Member) UpdateMember(email string, contactNo string) (bool, error) {
+	db := ConnectionHelper()
+	if err := db.Model(m).Updates(Member{Email: email, Phone: contactNo}).Error; err != nil {
+		return false, err
+	}
+	return true, nil
+}
+func (m *Member) DeleteMember(id uint) (bool, error) {
+	db := ConnectionHelper()
+	if err := db.Delete(&Member{}, id).Error; err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (m *Member) GetMemberByEmail(email string) (*Member, error) {
+	db := ConnectionHelper()
+	var member Member
+	if err := db.Where("email = ?", email).First(&member).Error; err != nil {
+		return nil, err
+	}
+	return &member, nil
+}
+func (m *Member) GetMemberByPhone(phone string) (*[]Member, error) {
+	db := ConnectionHelper()
+	var members []Member
+
+	if err := db.Where("phone = ?", phone).Find(&members).Error; err != nil {
+		return nil, err
+	}
+	return &members, nil
+}
