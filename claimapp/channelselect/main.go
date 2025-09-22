@@ -22,10 +22,11 @@ func main() {
 
 	//bp producer
 	go func() {
+		//time delay
+		t := time.NewTicker(800 * time.Millisecond)
+		defer t.Stop()
 		for {
-			//time delay
-			t := time.NewTicker(800 * time.Millisecond)
-			defer t.Stop()
+
 			for range t.C {
 				bpChannel <- gofakeit.IntRange(60, 230)
 			}
@@ -33,10 +34,11 @@ func main() {
 	}()
 	//ecg producer
 	go func() {
+		//time delay
+		t := time.NewTicker(800 * time.Millisecond)
+		defer t.Stop()
 		for {
-			//time delay
-			t := time.NewTicker(800 * time.Millisecond)
-			defer t.Stop()
+
 			for range t.C {
 
 				ecgChannel <- ecgMessage[gofakeit.IntRange(0, len(ecgMessage)-1)]
@@ -46,10 +48,11 @@ func main() {
 
 	//log producer
 	go func() {
+		//time delay
+		t := time.NewTicker(2 * time.Second)
+		defer t.Stop()
 		for {
-			//time delay
-			t := time.NewTicker(2 * time.Second)
-			defer t.Stop()
+
 			for range t.C {
 				logChannel <- gofakeit.HipsterSentence(10)
 			}
@@ -58,10 +61,11 @@ func main() {
 
 	//alert producer
 	go func() {
+		//time delay
+		t := time.NewTicker(5 * time.Second)
+		defer t.Stop()
 		for {
-			//time delay
-			t := time.NewTicker(5 * time.Second)
-			defer t.Stop()
+
 			for range t.C {
 				alertChannel <- "Alert: " + gofakeit.HipsterSentence(5)
 			}
