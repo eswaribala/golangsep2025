@@ -8,11 +8,11 @@ import (
 func main() {
 
 	claimChannel := make(chan models.Claim, 5)
-
+	noOfClaims := gofakeit.IntRange(5, 15)
 	//claim array
 	var claims []models.Claim
 	//simulate adding claims to the channel
-	for i := 1; i <= 10; i++ {
+	for i := 1; i <= noOfClaims; i++ {
 		claim := models.Claim{
 			ID:     uint(gofakeit.IntRange(10000, 10000000)),
 			Amount: gofakeit.IntRange(10000, 10000000),
@@ -35,7 +35,7 @@ func main() {
 
 	//claim processed by the server
 	println("Processing claims...")
-	for i := 1; i <= 10; i++ {
+	for i := 1; i <= noOfClaims; i++ {
 		claim := <-claimChannel
 		println("Claim ID:", claim.ID, "Amount:", claim.Amount)
 	}
