@@ -15,7 +15,7 @@ func InitDB() {
 
 }
 
-func getDBConnection() string {
+func GetDBConnection() string {
 	once.Do(InitDB)
 	return dbConnection
 }
@@ -26,7 +26,7 @@ func main() {
 		wg.Add(1)
 		go func(id int) {
 			defer wg.Done()
-			conn := getDBConnection()
+			conn := GetDBConnection()
 			fmt.Printf("Goroutine %d: %s\n", id, conn)
 		}(i)
 	}
