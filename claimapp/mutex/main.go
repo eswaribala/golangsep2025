@@ -9,7 +9,7 @@ import (
 	"github.com/eswaribala/claimapp/models"
 )
 
-var memberInstance = models.Member{
+var member = models.Member{
 	ID:                   gofakeit.IntRange(1, 1000),
 	Username:             gofakeit.Name(),
 	Email:                gofakeit.Email(),
@@ -28,12 +28,12 @@ func CallCenterApp(wg *sync.WaitGroup) {
 	// Simulate work with sleep
 	time.Sleep(2 * time.Second)
 	mutex.Lock()
-	memberInstance.EmergencyContactName = gofakeit.Name()
-	memberInstance.LowIncome = gofakeit.Bool()
-	memberInstance.PreferredContact = gofakeit.RandomString([]string{"email", "phone", "text"})
-	memberInstance.Consent = gofakeit.Bool()
+	member.EmergencyContactName = gofakeit.Name()
+	member.LowIncome = gofakeit.Bool()
+	member.PreferredContact = gofakeit.RandomString([]string{"email", "phone", "text"})
+	member.Consent = gofakeit.Bool()
 
-	fmt.Println("Processing member in Call Center App:", memberInstance)
+	fmt.Println("Processing member in Call Center App:", member)
 
 	mutex.Unlock()
 
@@ -46,12 +46,12 @@ func WebApp(wg *sync.WaitGroup) {
 	// Simulate work with sleep
 	time.Sleep(2 * time.Second)
 	mutex.Lock()
-	memberInstance.EmergencyContactName = gofakeit.Name()
-	memberInstance.LowIncome = gofakeit.Bool()
-	memberInstance.PreferredContact = gofakeit.RandomString([]string{"email", "phone", "text"})
-	memberInstance.Consent = gofakeit.Bool()
+	member.EmergencyContactName = gofakeit.Name()
+	member.LowIncome = gofakeit.Bool()
+	member.PreferredContact = gofakeit.RandomString([]string{"email", "phone", "text"})
+	member.Consent = gofakeit.Bool()
 
-	fmt.Println("Processing member in Web App:", memberInstance)
+	fmt.Println("Processing member in Web App:", member)
 
 	mutex.Unlock()
 	fmt.Println("Web App completed")
@@ -63,12 +63,12 @@ func SupplementalService(wg *sync.WaitGroup) {
 	// Simulate work with sleep
 	time.Sleep(2 * time.Second)
 	mutex.Lock()
-	memberInstance.EmergencyContactName = gofakeit.Name()
-	memberInstance.LowIncome = gofakeit.Bool()
-	memberInstance.PreferredContact = gofakeit.RandomString([]string{"email", "phone", "text"})
-	memberInstance.Consent = gofakeit.Bool()
+	member.EmergencyContactName = gofakeit.Name()
+	member.LowIncome = gofakeit.Bool()
+	member.PreferredContact = gofakeit.RandomString([]string{"email", "phone", "text"})
+	member.Consent = gofakeit.Bool()
 
-	fmt.Println("Processing member in Supplemental Service:", memberInstance)
+	fmt.Println("Processing member in Supplemental Service:", member)
 
 	mutex.Unlock()
 	fmt.Println("Supplemental Service completed")
