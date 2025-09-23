@@ -3,41 +3,33 @@ package main
 import (
 	"fmt"
 	"sync"
-	"time"
 )
 
 var once sync.Once
+var dbConnection string
 
-func StopAll() {
+func InitDB() {
 
-	fmt.Println("Processing stop all...")
-	time.Sleep(2 * time.Second)
-	fmt.Println("Stop all processed.")
-}
-
-func PremiumPayment(wg *sync.WaitGroup) {
-	defer wg.Done()
-	fmt.Println("Processing premium payment...")
-	time.Sleep(2 * time.Second)
-	fmt.Println("Premium payment processed.")
+	fmt.Println("Database Initialized")
+	dbConnection = "DB Connection Established"
 
 }
 
-func ReportClaim(wg *sync.WaitGroup) {
-	defer wg.Done()
-	fmt.Println("Processing report claim...")
-	time.Sleep(2 * time.Second)
-	fmt.Println("Report claim processed.")
-	once.Do(StopAll)
-
+func getDBConnection() string {
+	once.Do(InitDB)
+	return dbConnection
 }
 
 func main() {
 	var wg sync.WaitGroup
-	wg.Add(2)
-	go PremiumPayment(&wg)
-	go ReportClaim(&wg)
+	for i := 0; i < 5; i++ {
+		wg.Add(1)
+		go func(id int) {
+			defer wg.Done()
+			conn := getDBConnection()
+			fmt.Printf("Goroutine %d: %s\n", id, conn)
+		}(i)
+	}
 	wg.Wait()
-	fmt.Println("All tasks completed.")
-
+	fmt.Println("All goroutines finished.")
 }
