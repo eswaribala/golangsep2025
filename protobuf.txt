@@ -3,8 +3,8 @@ go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
  go get google.golang.org/protobuf/proto
  go get google.golang.org/protobuf/types/known/timestamppb
  download https://github.com/protocolbuffers/protobuf/releases --> get protoc-32.1-win32.zip
-
- add bin folder on env path
+ extract the zip file 
+ add bin folder path on env path
  #test
  #open cmd
  protoc -- version
