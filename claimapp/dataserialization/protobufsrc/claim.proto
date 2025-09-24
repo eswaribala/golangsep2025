@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package protobufsrc;
+option go_package = "github.com/eswaribala/claimapp/dataserialization/protobufsrc/gen/demo/v1;v1";
+
+import "google/protobuf/timestamp.proto"; // for created_at
+
+message Claim {
+  int64 id = 1;                        // field numbers are forever
+  string type = 2;
+  int64 amount = 3;                    // optional presence: see below
+  google.protobuf.Timestamp created_at = 4;
+  repeated string tags = 5;            // lists
+  map<string, string> meta = 6;        // maps
+  oneof contact {                      // mutually exclusive variants
+    string phone = 7;
+    string slack = 8;
+  }
+}
