@@ -10,8 +10,7 @@ message Claim {
   string claim_type = 2;
   int64 claim_amount = 3;                    // optional presence: see below
   google.protobuf.Timestamp created_at = 4;
-  string status = 5
-  string description = 6
-
+  string status = 5;
+  string description = 6;
   
 }
