@@ -1,9 +1,11 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/eswaribala/claimapp/claimapi/store"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 // @title Claim API
@@ -24,6 +26,13 @@ func main() {
 	mux.HandleFunc("GET /claims/v1.0/{id}", store.GetClaimByID)
 	mux.HandleFunc("PUT /claims/v1.0/{id}", store.UpdateClaim)
 	mux.HandleFunc("DELETE /claims/v1.0/{id}", store.DeleteClaim)
-	http.ListenAndServe(":7072", mux)
+	// Swagger UI served at /swagger/
+	mux.Handle("/swagger/", httpSwagger.WrapHandler)
+
+	// Your own handlers
+	// mux.HandleFunc("/claims", claimsHandler)
+
+	log.Println("Server running at http://localhost:7072")
+	log.Fatal(http.ListenAndServe(":7072", mux))
 
 }
