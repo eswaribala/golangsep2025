@@ -13,7 +13,7 @@ definitions:
       status:
         type: string
     type: object
-host: localhost:7072
+host: localhost:7074
 info:
   contact:
     email: parameswaribala@gmail.com

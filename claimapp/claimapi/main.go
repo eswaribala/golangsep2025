@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	_ "github.com/eswaribala/claimapp/claimapi/docs"
 	"github.com/eswaribala/claimapp/claimapi/store"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
@@ -16,7 +17,7 @@ import (
 // @contact.email parameswaribala@gmail.com
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @host localhost:7072
+// @host localhost:7074
 // @BasePath /
 func main() {
 
@@ -32,7 +33,7 @@ func main() {
 	// Your own handlers
 	// mux.HandleFunc("/claims", claimsHandler)
 
-	log.Println("Server running at http://localhost:7072")
-	log.Fatal(http.ListenAndServe(":7072", mux))
+	log.Println("Server running at http://localhost:7074")
+	log.Fatal(http.ListenAndServe(":7074", mux))
 
 }
