@@ -11,8 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var client *mongo.Client
-
 func MongoDBConnectionHelper() (*mongo.Client, error) {
 	// MongoDB connection helper
 	_ = godotenv.Load(".env")
