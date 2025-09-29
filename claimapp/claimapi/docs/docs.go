@@ -90,7 +90,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/claims/v1.0/{id}": {
+        "/claims/v1.0/{claimid}": {
             "get": {
                 "description": "Get details of requested claim",
                 "consumes": [
@@ -107,7 +107,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "ID of the Claim",
-                        "name": "id",
+                        "name": "claimid",
                         "in": "path",
                         "required": true
                     }
@@ -153,7 +153,14 @@ const docTemplate = `{
                 "summary": "Update existing claim",
                 "parameters": [
                     {
-                        "description": "Update claim",
+                        "type": "integer",
+                        "description": "ID of the Claim to update",
+                        "name": "claimid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated claim fields",
                         "name": "claim",
                         "in": "body",
                         "required": true,
@@ -167,6 +174,24 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/store.Claim"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Claim not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -187,7 +212,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "ID of the Claim",
-                        "name": "id",
+                        "name": "claimid",
                         "in": "path",
                         "required": true
                     }
@@ -248,7 +273,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:7074",
+	Host:             "localhost:7072",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Claim API",

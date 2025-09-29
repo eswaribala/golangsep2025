@@ -13,7 +13,7 @@ definitions:
       status:
         type: string
     type: object
-host: localhost:7074
+host: localhost:7072
 info:
   contact:
     email: parameswaribala@gmail.com
@@ -70,7 +70,7 @@ paths:
       summary: Create a new claim
       tags:
       - claims
-  /claims/v1.0/{id}:
+  /claims/v1.0/{claimid}:
     delete:
       consumes:
       - application/json
@@ -78,7 +78,7 @@ paths:
       parameters:
       - description: ID of the Claim
         in: path
-        name: id
+        name: claimid
         required: true
         type: integer
       produces:
@@ -110,7 +110,7 @@ paths:
       parameters:
       - description: ID of the Claim
         in: path
-        name: id
+        name: claimid
         required: true
         type: integer
       produces:
@@ -140,7 +140,12 @@ paths:
       - application/json
       description: Update existing claim with the input payload
       parameters:
-      - description: Update claim
+      - description: ID of the Claim to update
+        in: path
+        name: claimid
+        required: true
+        type: integer
+      - description: Updated claim fields
         in: body
         name: claim
         required: true
@@ -153,6 +158,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/store.Claim'
+        "400":
+          description: Invalid ID supplied
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Claim not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
       summary: Update existing claim
       tags:
       - claims
