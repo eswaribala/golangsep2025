@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongo
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 15
+        window: 50s
+    #networks:
+      #- default
+    ports:
+      - "7072:7072"
+volumes:
+  data:
+networks: 
+  default: 
+    external: 
+      name: cognizantnetwork
