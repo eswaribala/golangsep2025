@@ -15,4 +15,30 @@ http://localhost:8200
 #type key and value
   uri mongodb://host.docker.internal:27017
 
+#claim api in docker
+#go to claim api folder
+#run 
+docker-compose up -d
+#ensure container up and running
+#check api running in localhost:7072/swagger/index.html from browser
+#do the post operation
+#check the container mongo to view data
+#stop mongo db service in windows
+#run
+docker container ls -a
+#pick up mongo container id
+#access mongo server
+docker exec -it <containerid> bin/bash
+#you see hash prompt
+#type the following
+mongosh
+#to get list of dbs, type
+show dbs;
+#to switch to claim db
+use ClaimDB;
+#to show collections, type
+show collections;
+#to check collection
+db.claims.find();
+
 
