@@ -1,0 +1,176 @@
+basePath: /
+definitions:
+  store.Claim:
+    properties:
+      amount:
+        type: integer
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      status:
+        type: string
+    type: object
+host: localhost:7072
+info:
+  contact:
+    email: parameswaribala@gmail.com
+    name: API Support
+  description: This is api service for managing Claims
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Claim API
+  version: "1.0"
+paths:
+  /claims/v1.0:
+    get:
+      consumes:
+      - application/json
+      description: Returns list of claims
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/store.Claim'
+            type: array
+      summary: Get all claims
+      tags:
+      - claims
+    post:
+      consumes:
+      - application/json
+      description: Adds a new claim
+      parameters:
+      - description: Claim to create
+        in: body
+        name: claim
+        required: true
+        schema:
+          $ref: '#/definitions/store.Claim'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/store.Claim'
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new claim
+      tags:
+      - claims
+  /claims/v1.0/{claimid}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete requested claim
+      parameters:
+      - description: ID of the Claim
+        in: path
+        name: claimid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Claim'
+        "400":
+          description: Invalid ID supplied
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Claim not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete requested claim
+      tags:
+      - claims
+    get:
+      consumes:
+      - application/json
+      description: Get details of requested claim
+      parameters:
+      - description: ID of the Claim
+        in: path
+        name: claimid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Claim'
+        "400":
+          description: Invalid ID supplied
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Claim not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get details of requested claim
+      tags:
+      - claims
+    put:
+      consumes:
+      - application/json
+      description: Update existing claim with the input payload
+      parameters:
+      - description: ID of the Claim to update
+        in: path
+        name: claimid
+        required: true
+        type: integer
+      - description: Updated claim fields
+        in: body
+        name: claim
+        required: true
+        schema:
+          $ref: '#/definitions/store.Claim'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Claim'
+        "400":
+          description: Invalid ID supplied
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Claim not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update existing claim
+      tags:
+      - claims
+swagger: "2.0"
