@@ -1,0 +1,18 @@
+#to run vault server,download vaulserver.zip from repository
+#go to vault server folder where docker-compose yml
+#run
+docker-compose up -d
+#to check container
+docker container ls -a
+#to get root key
+docker logs <containerid>
+#copy the root key
+# go to browser
+http://localhost:8200
+#go to secrets
+#click on secrets, create secret
+#path name mongodbpath
+#type key and value
+  uri mongodb://host.docker.internal:27017
+
+
