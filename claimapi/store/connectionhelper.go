@@ -215,7 +215,7 @@ func DeleteClaim(writer http.ResponseWriter, request *http.Request) {
 
 func VaultConnectionHelper() string {
 	println("Connecting to vault")
-	token := "s.VWabeXLHztxc9YvIFqjR5FrK"
+	token := "s.zx5ZaCXoxnS0ZaiysT5TDfFL"
 	vaultAddr := "http://vault:8200"
 
 	client, err := api.NewClient(&api.Config{Address: vaultAddr, HttpClient: &http.Client{Timeout: 100 * time.Second}})

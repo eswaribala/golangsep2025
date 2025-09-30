@@ -84,6 +84,56 @@
                 }
             }
         },
+        "/claims/v1.0/kafka/{claimid}": {
+            "get": {
+                "description": "Get details of requested claim",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "claims"
+                ],
+                "summary": "Get details of requested claim",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID of the Claim",
+                        "name": "claimid",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/store.Claim"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Claim not found",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/claims/v1.0/{claimid}": {
             "get": {
                 "description": "Get details of requested claim",

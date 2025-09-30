@@ -21,10 +21,17 @@ import (
 // @BasePath /
 func main() {
 
+	res := store.EnsureTopic()
+	if res != nil {
+		log.Fatalf("failed to ensure kafka topic: %v", res)
+	}
+	println("Kafka topic ensured")
+	store.InitKafkaWriters()
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /claims/v1.0", store.GetClaims)
 	mux.HandleFunc("POST /claims/v1.0", store.SaveClaim)
 	mux.HandleFunc("GET /claims/v1.0/{claimid}", store.GetClaimByID)
+	mux.HandleFunc("GET /claims/v1.0/kafka/{claimid}", store.PublishClaimInfoByID)
 	mux.HandleFunc("PUT /claims/v1.0/{claimid}", store.UpdateClaim)
 	mux.HandleFunc("DELETE /claims/v1.0/{claimid}", store.DeleteClaim)
 	// Swagger UI served at /swagger/

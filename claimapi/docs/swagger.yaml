@@ -173,4 +173,37 @@ paths:
       summary: Update existing claim
       tags:
       - claims
+  /claims/v1.0/kafka/{claimid}:
+    get:
+      consumes:
+      - application/json
+      description: Get details of requested claim
+      parameters:
+      - description: ID of the Claim
+        in: path
+        name: claimid
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Claim'
+        "400":
+          description: Invalid ID supplied
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Claim not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get details of requested claim
+      tags:
+      - claims
 swagger: "2.0"
