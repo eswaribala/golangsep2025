@@ -18,3 +18,5 @@ docker-compose down
 docker rmi claim-server
 #run the compose file
 docker-compose up -d
+#ensure container runs and connected to kafka and vault
+docker logs 641a18cd2723
