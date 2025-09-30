@@ -1,0 +1,20 @@
+#open existing claim api service
+#create kafka publisher go file
+# in that file import kafaka library
+# define kafka constants --. topic name, server name and event name
+# ensure topic created
+# create kafka writer
+# initializa kafka write using kafka topic
+# create kafka publisher function
+# it take claim id as input and fetched claim details from mongodb
+# publish claim details by serializing it to json
+# giveit to kafkawriter. Data will be published
+# in main. go call Ensure topic creation function and Kafka writer initializer
+# add additional endpoint for kafka
+# generate swagger documents by typing swag init
+# stop the container (claim conatiner)
+docker-compose down
+#remove the image
+docker rmi claim-server
+#run the compose file
+docker-compose up -d
