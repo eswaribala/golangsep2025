@@ -73,7 +73,15 @@ func main() {
 		for k, v := range ClaimData {
 			if k == "claim" {
 				fmt.Printf("%s : %v\n", k, v)
-				store.SaveClaimInfo(v.(string))
+				//convert v to json string
+				jsonString, err := json.Marshal(v)
+				if err != nil {
+					fmt.Printf("Failed to convert claim info to json string: %v", err)
+					return
+				}
+				fmt.Printf("Claim JSON: %s\n", jsonString)
+
+				store.SaveClaimInfo(string(jsonString))
 			}
 		}
 		if len(m.Headers) > 0 {
