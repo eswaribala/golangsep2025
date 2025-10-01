@@ -2,17 +2,25 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/cog/claimapiconsumer/store"
+
 	"github.com/joho/godotenv"
 	"github.com/segmentio/kafka-go"
 )
 
 func main() {
+
+	db := store.MySQLConnectionHelper()
+	store.GetTableInstance(db)
+
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
@@ -52,7 +60,22 @@ func main() {
 
 		// --- Your processing here ---
 		log.Printf("partition=%d offset=%d key=%s value=%s", m.Partition, m.Offset, string(m.Key), string(m.Value))
+		//convert m.Value key pair value
+		//json to map
 
+		var ClaimData map[string]interface{}
+		if err := json.Unmarshal(m.Value, &ClaimData); err != nil {
+			fmt.Printf("Failed to parse claim info: %v", err)
+			return
+		}
+		fmt.Println(ClaimData)
+		//read key value pair
+		for k, v := range ClaimData {
+			if k == "claim" {
+				fmt.Printf("%s : %v\n", k, v)
+				store.SaveClaimInfo(v.(string))
+			}
+		}
 		if len(m.Headers) > 0 {
 			for _, h := range m.Headers {
 				log.Printf("  header %s=%s", h.Key, string(h.Value))

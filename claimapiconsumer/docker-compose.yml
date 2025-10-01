@@ -1,11 +1,24 @@
 version: "3.7"
 services:
-  
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=vignesh
+      - MYSQL_DATABASE=claimdockerdb
+    volumes:
+      - /data/mysql
+    #networks:
+      #- default
+    healthcheck:
+      interval: 30s
+      timeout: 10s
+      retries: 5
   server:
     build:
       context: .
       dockerfile: Dockerfile
-    
+    depends_on:
+      - mysql
     deploy:
       restart_policy:
         condition: on-failure
