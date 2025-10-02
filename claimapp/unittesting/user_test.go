@@ -28,10 +28,10 @@ func TestValidateUser(t *testing.T) {
 		Password: "P@ssw0rd",
 	}
 
-	assert.NoError(t, ValidateUser(userInstance))
+	assert.NoError(t, ValidateUserName(userInstance))
 }
 
-func TestUserFromCSV(t *testing.T) {
+func TestUserNameFromCSV(t *testing.T) {
 	csvReader, err := OpenCSVFile("userdata.csv")
 	if err != nil {
 		t.Fatalf("Failed to open CSV file: %v", err)
@@ -47,7 +47,7 @@ func TestUserFromCSV(t *testing.T) {
 			Password: record[2],
 		}
 		log.Println("Testing user:", user)
-		err := ValidateUser(user)
+		err := ValidateUserName(user)
 		assert.NoError(t, err, "Validation failed for user: %+v", user)
 	}
 }
@@ -77,7 +77,7 @@ func TestUserNameFromCSVAssertEqual(t *testing.T) {
 		}
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
-				err := ValidateUser(tt.in)
+				err := ValidateUserName(tt.in)
 				assert.Equal(t, tt.want, err)
 			})
 		}
@@ -105,11 +105,11 @@ func TestUserEmailFromCSVAssertEqual(t *testing.T) {
 			in   User
 			want error
 		}{
-			{"Valid User Name", user, ErrInvalidUserEmail},
+			{"Valid Email", user, ErrInvalidUserEmail},
 		}
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
-				err := ValidateUser(tt.in)
+				err := ValidateUserEmailFromCSVAssertEqual(tt.in)
 				assert.Equal(t, tt.want, err)
 			})
 		}
@@ -141,7 +141,7 @@ func TestUserPasswordFromCSVAssertEqual(t *testing.T) {
 		}
 		for _, tt := range tests {
 			t.Run(tt.name, func(t *testing.T) {
-				err := ValidateUser(tt.in)
+				err := ValidateUserPasswordFromCSVAssertEqual(tt.in)
 				assert.Equal(t, tt.want, err)
 			})
 		}

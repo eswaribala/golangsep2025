@@ -17,17 +17,11 @@ var (
 	ErrInvalidUserPass  = errors.New("invalid user password")
 )
 
-func ValidateUser(u User) error {
+func ValidateUserName(u User) error {
 
 	// user name not empty
 	if u.Name == "" {
 		return ErrInvalidUserName
-	}
-	if u.Email == "" {
-		return ErrInvalidUserEmail
-	}
-	if u.Password == "" {
-		return ErrInvalidUserPass
 	}
 
 	//user name regular expression
@@ -35,12 +29,29 @@ func ValidateUser(u User) error {
 	if !re.MatchString(u.Name) {
 		return ErrInvalidUserName
 	}
+
+	return nil
+}
+
+func ValidateUserEmailFromCSVAssertEqual(u User) error {
+	if u.Email == "" {
+		return ErrInvalidUserEmail
+	}
 	//user email regular expression
-	re = regexp.MustCompile(`^[a-zA-Z0-9._%+-]{1,}@[a-zA-Z0-9.-]{2,}\.[a-zA-Z]{2,}$`)
+	re := regexp.MustCompile(`^[a-zA-Z0-9._%+-]{1,}@[a-zA-Z0-9.-]{2,}\.[a-zA-Z]{2,}$`)
 	if !re.MatchString(u.Email) {
 		return ErrInvalidUserEmail
 	}
+	return nil
+
+}
+
+func ValidateUserPasswordFromCSVAssertEqual(u User) error {
 	// user password validation: At least 8 characters, one uppercase, one lowercase, one number, one special character
+	if u.Password == "" {
+		return ErrInvalidUserPass
+	}
+
 	if len(u.Password) < 8 {
 		return ErrInvalidUserPass
 	}
