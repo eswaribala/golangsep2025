@@ -1,0 +1,31 @@
+package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+func TestAddClaim(t *testing.T) {
+	router := SetUpRouter()
+	claim := Claim{
+		ClaimID:     "12345",
+		Amount:      1000.50,
+		Description: "Test Claim",
+		Status:      true,
+	}
+	jsonValue, _ := json.Marshal(claim)
+	req, _ := http.NewRequest("POST", "/claims", bytes.NewBuffer(jsonValue))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusCreated, w.Code)
+	var returnedClaim Claim
+	err := json.Unmarshal(w.Body.Bytes(), &returnedClaim)
+	assert.Nil(t, err)
+	assert.Equal(t, claim, returnedClaim)
+}
