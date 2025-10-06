@@ -47,6 +47,18 @@ func TestAddClaimInvalidJSON(t *testing.T) {
 	assert.Contains(t, response["error"], "json: cannot unmarshal")
 }
 
+func TestGetClaims(t *testing.T) {
+	router := SetUpRouter()
+	req, _ := http.NewRequest("GET", "/claims", nil)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusOK, w.Code)
+	var returnedClaims []Claim
+	err := json.Unmarshal(w.Body.Bytes(), &returnedClaims)
+	assert.Nil(t, err)
+	assert.Equal(t, claims, returnedClaims)
+}
+
 func TestClaimAPI_ExternalMock(t *testing.T) {
 	m := mocha.New(t)
 	defer m.Close()
