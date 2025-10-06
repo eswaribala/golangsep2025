@@ -29,3 +29,17 @@ func TestAddClaim(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, claim, returnedClaim)
 }
+
+func TestAddClaimInvalidJSON(t *testing.T) {
+	router := SetUpRouter()
+	invalidJSON := `{"ClaimID": "12345", "Amount": "invalid_amount", "Description": "Test Claim", "Status": true}`
+	req, _ := http.NewRequest("POST", "/claims", bytes.NewBufferString(invalidJSON))
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	var response map[string]string
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+	assert.Nil(t, err)
+	assert.Contains(t, response["error"], "json: cannot unmarshal")
+}
