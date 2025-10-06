@@ -27,7 +27,18 @@ func AddClaim(c *gin.Context) {
 
 }
 
+func GetClaims(c *gin.Context) {
+	c.JSON(http.StatusOK, claims)
+}
+
 func SetUpRouter() *gin.Engine {
+	r := gin.Default()
+	r.POST("/claims", AddClaim)
+	r.GET("/claims", GetClaims)
+	return r
+}
+
+func TestRouter(url string) *gin.Engine {
 	r := gin.Default()
 	r.POST("/claims", AddClaim)
 	return r

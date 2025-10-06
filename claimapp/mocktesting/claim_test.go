@@ -50,8 +50,8 @@ func TestAddClaimInvalidJSON(t *testing.T) {
 func TestClaimAPI_ExternalMock(t *testing.T) {
 	m := mocha.New(t)
 	defer m.Close()
-	router := SetUpRouter()
-	m.AddMocks(mocha.Get(expect.URLPath("/claims")).
+
+	m.AddMocks(mocha.Post(expect.URLPath("/claims")).
 		Header("Content-Type", expect.ToEqual("application/json")).
 		Body(expect.ToEqual(`{"ClaimID":"12345","Amount":1000.5,"Description":"Test Claim","Status":true}`)).
 		Reply(reply.Created()))
@@ -61,6 +61,7 @@ func TestClaimAPI_ExternalMock(t *testing.T) {
 		Description: "Test Claim",
 		Status:      true,
 	}
+	router := TestRouter(m.URL())
 	jsonValue, _ := json.Marshal(claim)
 	req, _ := http.NewRequest("POST", "/claims", bytes.NewBuffer(jsonValue))
 	req.Header.Set("Content-Type", "application/json")
