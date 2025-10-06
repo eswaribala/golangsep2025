@@ -31,6 +31,45 @@ func TestValidateUser(t *testing.T) {
 	assert.NoError(t, ValidateUserName(userInstance))
 }
 
+func TestValidateUserNameNotEmpty(t *testing.T) {
+	userInstance := User{
+		Name:     "",
+		Email:    "john.doe@example.com",
+		Password: "P@ssw0rd",
+	}
+
+	assert.Error(t, ValidateUserNameNotEmpty(userInstance))
+}
+
+func TestValidateUserEmailNotEmpty(t *testing.T) {
+	userInstance := User{
+		Name:     "JohnDoe",
+		Email:    "",
+		Password: "P@ssw0rd",
+	}
+
+	assert.Error(t, ValidateUserEmailNotEmpty(userInstance))
+}
+
+func TestValidateUserPasswordNotEmpty(t *testing.T) {
+	userInstance := User{
+		Name:     "JohnDoe",
+		Email:    "john.doe@example.com",
+		Password: "",
+	}
+
+	assert.Error(t, ValidateUserPasswordNotEmpty(userInstance))
+}
+func TestValidateUserPasswordLength(t *testing.T) {
+	userInstance := User{
+		Name:     "JohnDoe",
+		Email:    "john.doe@example.com",
+		Password: "P@ssw0d",
+	}
+
+	assert.Error(t, ValidateUserPasswordLength(userInstance))
+}
+
 func TestUserNameFromCSV(t *testing.T) {
 	csvReader, err := OpenCSVFile("userdata.csv")
 	if err != nil {

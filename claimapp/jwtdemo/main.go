@@ -1,15 +1,18 @@
 package main
 
 import (
+	"context"
+	"errors"
 	"log"
 	"net/http"
 	"time"
 
-	"github.com/gin-gonic/gin"
-
 	docs "github.com/eswaribala/claimapp/jwtdemo/docs" // <-- replace with your module name
+	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // @title           JWT Auth Demo API
@@ -35,6 +38,51 @@ func health(c *gin.Context) {
 	c.String(http.StatusOK, "ok")
 }
 
+// register issues a JWT (public)
+// @Summary     Register (demo)
+// @Description Use demo data to register a user
+// @Tags        users
+// @Accept      json
+// @Produce     json
+// @Param       RegisterRequest body RegisterRequest true "Credentials"
+// @Success     200 {object} TokenResponse
+// @Failure     401 {object} APIError
+// @Router      /register [post]
+func register(c *gin.Context) {
+	var body RegisterRequest
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusBadRequest, APIError{Message: "invalid request"})
+		return
+	}
+
+	// Demo validation only
+	if body.Username == "" || body.Password == "" || body.Email == "" || len(body.Roles) == 0 {
+		c.JSON(http.StatusUnauthorized, APIError{Message: "invalid credentials"})
+		return
+	}
+
+	// Placeholder for save claim logic
+	mongoClient, err := MongoDBConnectionHelper()
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, APIError{Message: "invalid connection"})
+		return
+	}
+
+	//request to db
+	collection := mongoClient.Database("JWTDB").Collection("users")
+
+	_, err = collection.InsertOne(context.TODO(), body)
+	c.Header("Content-Type", "application/json")
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, APIError{Message: err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, body)
+
+}
+
 // login issues a JWT (public)
 // @Summary     Login (demo)
 // @Description Use demo creds to get a JWT: username=admin, password=admin
@@ -52,15 +100,35 @@ func login(c *gin.Context) {
 		return
 	}
 
+	log.Println(body.Username, body.Password)
 	// Demo validation only
-	if body.Username != "admin" || body.Password != "admin" {
-		c.JSON(http.StatusUnauthorized, APIError{Message: "invalid credentials"})
+	/*
+		if body.Username != "admin" || body.Password != "admin" {
+			c.JSON(http.StatusUnauthorized, APIError{Message: "invalid credentials"})
+			return
+		}
+	*/
+	mongoClient, err := MongoDBConnectionHelper()
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, APIError{Message: "invalid connection"})
+		return
+	}
+
+	//request to db
+	var registerRequest RegisterRequest
+	collection := mongoClient.Database("JWTDB").Collection("users")
+	if err := collection.FindOne(context.TODO(), bson.M{"username": body.Username}).Decode(&registerRequest); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			c.JSON(http.StatusUnauthorized, APIError{Message: "invalid credentials"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, APIError{Message: err.Error()})
 		return
 	}
 
 	// Create token valid for 15 minutes
 	token, err := CreateToken(TokenClaims{
-		Username: body.Username,
+		Username: registerRequest.Username,
 		Role:     "demo-admin",
 		RegisteredClaims: RegisteredClaims{
 			Issuer:    "jwtdemo",
@@ -105,6 +173,7 @@ func main() {
 
 	// Public
 	r.GET("/health", health)
+	r.POST("/register", register)
 	r.POST("/login", login)
 
 	// Swagger

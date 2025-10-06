@@ -30,6 +30,23 @@ definitions:
         example: admin
         type: string
     type: object
+  main.RegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      roles:
+        description: e.g. ["admin","manager"]
+        items:
+          type: string
+        type: array
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
   main.TokenResponse:
     properties:
       access_token:
@@ -100,6 +117,32 @@ paths:
       summary: Login (demo)
       tags:
       - auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Use demo data to register a user
+      parameters:
+      - description: Credentials
+        in: body
+        name: RegisterRequest
+        required: true
+        schema:
+          $ref: '#/definitions/main.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.TokenResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.APIError'
+      summary: Register (demo)
+      tags:
+      - users
 schemes:
 - http
 securityDefinitions:
