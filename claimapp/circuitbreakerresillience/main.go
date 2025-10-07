@@ -48,7 +48,7 @@ func main() {
 		DisableBackoff: false, // keep built-in exponential backoff+jitter
 	})
 
-	timeoutMw := timeout.NewMiddleware(timeout.Config{Timeout: 50 * time.Second})
+	timeoutMw := timeout.NewMiddleware(timeout.Config{Timeout: 2 * time.Second})
 
 	// Order: RateLimit → Timeout → CircuitBreaker → Retry
 	runner := goresilience.RunnerChain(rlMw, timeoutMw, cbMw, retryMw)
@@ -57,7 +57,7 @@ func main() {
 	//for i := 1; i <= 12; i++ {
 	//log.Printf("\n=== Attempt %d ===", i)
 	err := runner.Run(ctx, func(ctx context.Context) error {
-		resp, err := http.Get("https://jsonplaceholder.typicode.com/posts/1")
+		resp, err := http.Get("https://jsonplaceholder.typcode.com/posts/1")
 		if err != nil {
 			log.Printf("HTTP error: %v", err)
 			return err
