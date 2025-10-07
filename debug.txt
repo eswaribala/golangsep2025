@@ -1,0 +1,4 @@
+go install github.com/go-delve/delve/cmd/dlv@latest
+dlv debug #Debug a package or main
+dlv debug ./cmd/claimapp #specific file
+dlv attach <pid>
