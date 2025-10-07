@@ -1,0 +1,4 @@
+Add a new member ( Member Demographic, Address, etc )
+Member Update ( Demographic update )
+Member Termination ( Term the member )
+Member Reinstate ( Reisntate the member )
