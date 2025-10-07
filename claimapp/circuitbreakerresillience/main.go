@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/slok/goresilience"
+	"github.com/slok/goresilience/bulkhead"
 	"github.com/slok/goresilience/circuitbreaker"
 	"github.com/slok/goresilience/retry"
 	"github.com/slok/goresilience/timeout"
@@ -50,8 +51,14 @@ func main() {
 
 	timeoutMw := timeout.NewMiddleware(timeout.Config{Timeout: 50 * time.Second})
 
+	//bulk head
+	bhMw := bulkhead.NewMiddleware(bulkhead.Config{
+		Workers:     2,
+		MaxWaitTime: 100 * time.Millisecond,
+	})
+
 	// Order: RateLimit → Timeout → CircuitBreaker → Retry
-	runner := goresilience.RunnerChain(rlMw, timeoutMw, cbMw, retryMw)
+	runner := goresilience.RunnerChain(rlMw, timeoutMw, cbMw, retryMw, bhMw)
 
 	ctx := context.Background()
 	for i := 1; i <= 12; i++ {
