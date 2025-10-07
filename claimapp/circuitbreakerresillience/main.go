@@ -48,31 +48,31 @@ func main() {
 		DisableBackoff: false, // keep built-in exponential backoff+jitter
 	})
 
-	timeoutMw := timeout.NewMiddleware(timeout.Config{Timeout: 2 * time.Second})
+	timeoutMw := timeout.NewMiddleware(timeout.Config{Timeout: 50 * time.Second})
 
 	// Order: RateLimit → Timeout → CircuitBreaker → Retry
 	runner := goresilience.RunnerChain(rlMw, timeoutMw, cbMw, retryMw)
 
 	ctx := context.Background()
-	//for i := 1; i <= 12; i++ {
-	//log.Printf("\n=== Attempt %d ===", i)
-	err := runner.Run(ctx, func(ctx context.Context) error {
-		resp, err := http.Get("https://jsonplaceholder.typcode.com/posts/1")
+	for i := 1; i <= 12; i++ {
+		log.Printf("\n=== Attempt %d ===", i)
+		err := runner.Run(ctx, func(ctx context.Context) error {
+			resp, err := http.Get("https://jsonplaceholder.typicode.com/posts/1")
+			if err != nil {
+				log.Printf("HTTP error: %v", err)
+				return err
+			}
+			defer resp.Body.Close()
+			if resp.StatusCode != http.StatusOK {
+				return fmt.Errorf("bad status %d", resp.StatusCode)
+			}
+			b, _ := io.ReadAll(resp.Body)
+			log.Printf("OK (%d bytes)", len(b))
+			return nil
+		})
 		if err != nil {
-			log.Printf("HTTP error: %v", err)
-			return err
+			log.Printf("Run() error: %v", err)
 		}
-		defer resp.Body.Close()
-		if resp.StatusCode != http.StatusOK {
-			return fmt.Errorf("bad status %d", resp.StatusCode)
-		}
-		b, _ := io.ReadAll(resp.Body)
-		log.Printf("OK (%d bytes)", len(b))
-		return nil
-	})
-	if err != nil {
-		log.Printf("Run() error: %v", err)
+		time.Sleep(100 * time.Millisecond) // just to make logs readable
 	}
-	time.Sleep(100 * time.Millisecond) // just to make logs readable
-	//}
 }
